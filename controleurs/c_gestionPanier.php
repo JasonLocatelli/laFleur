@@ -56,6 +56,7 @@ switch($action)
                         $lesQuantites = getLesQuantites();
 			$lesIdProduit = getLesIdProduitsDuPanier();
 			$pdo->creerCommande($nom,$rue,$cp,$ville,$mail, $lesIdProduit,$lesQuantites);
+                        // je rajoute un nouveau code
 			$message = "Commande enregistrée";
 			supprimerPanier();
 			include ("vues/v_message.php");
