@@ -59,6 +59,7 @@ switch($action)
                         // je rajoute un nouveau code
 			$message = "Commande enregistrée";
                         $message .= "Panier vidé !";
+                        $message .= "Et voilà !";
 			supprimerPanier();
 			include ("vues/v_message.php");
 		}
