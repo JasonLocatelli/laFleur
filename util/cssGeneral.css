@@ -1,0 +1,112 @@
+html {
+font:normal 100%/1.2em "Trebuchet MS",Verdana,Helvetica,Arial,sans-serif;
+}
+
+fieldset {
+ 		display:block;
+ 		width:50%;
+		border: 1px dotted #353535;
+		padding:2px;
+ 		overflow:hidden;                   
+}
+
+label {
+	background:transparent none;
+	display: block;
+	width: 20%;
+	float: left;
+	padding-right: 1%;
+	text-align: left;
+}
+
+input {
+	margin-left: 1%;
+	width: 30%;
+	border: #CCC 1px solid;
+}
+
+input:hover, #ent input:focus {
+	border: #999 1px solid;
+	background-color: #DDEEFF;
+}
+
+input[type="submit"]
+{
+	border: #DDEEFF 1px solid;
+	width: 30%;
+}
+.erreur{ 
+   background-color:rgb(237,210,229);
+   color:rgb(203,28,128);
+   font-size:1.1em;
+   width:95%;
+}
+.message{ 
+   background-color:rgb(99, 184, 255);
+   color:rgb(0,0,205);
+   font-size:1.1em;
+   width:95%;
+}
+
+#bandeau {
+
+}
+
+#menu{
+height: 1.8em ;
+}
+
+#categories{
+float:left;
+}
+
+#produits{
+padding:0 150px;
+}
+
+#contenu{
+
+}
+
+#menu li {
+		list-style-type: none;
+		list-style-image:none;
+		float: left ; 
+		text-align: center;
+    width: 200px ; 
+    border: 1px solid #600 ; 
+    margin-right: 1px ; 
+    color: #fff ; 
+    background: #ccff11 ;
+}
+
+#menu li a , #categories li a {
+		text-decoration:none;
+}
+
+#categories li {
+		list-style-type: none;
+		list-style-image:none;
+		/*float:left; */
+    margin-right: 1px ;
+    border:1px solid #600;
+    width:100px;
+    text-align:center;
+background:#ccff11;
+}
+
+
+#produits li, #produits li a {
+		list-style-type: none;
+		list-style-image:none;
+		display:inline; 
+    width:175px;
+    text-align:center;
+    height:205px;
+    font: 1em "Trebuchet MS",Arial,sans-serif ;
+}
+
+#produits ul{
+}
+
+
