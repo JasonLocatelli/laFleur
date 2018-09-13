@@ -136,8 +136,18 @@ class PdoLafleur
 			$res = PdoLafleur::$monPdo->exec($req);
                         $i++;
 		}
-		
-	
 	}
+    /**
+     * retourne 1 si l'administrateur a bien saisi son nom et son mot de passe, 0 sinon
+     * @param  $user
+     * @param  $mdp
+     * @return le nombre d'utilisateurs ayant ce nom et ce mdp
+     */
+        public function validerAdmin($user,$mdp){
+            $req = "select count(*) as nb from administrateur where nom = '$user' and mdp ='$mdp'";
+            $res = PdoLafleur::$monPdo->query($req);
+            $laLigne = $res->fetch();
+            return $laLigne['nb'];            
+        }        
 }
 ?>

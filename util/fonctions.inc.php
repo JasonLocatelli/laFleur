@@ -189,4 +189,26 @@ function getErreursSaisieCommande($nom,$rue,$ville,$cp,$mail)
 	}
 	return $lesErreurs;
 }
+/**
+ * Teste si un administrateur est connecté
+ * crée une nouvelle entité dans le tableau des variables de session
+ */
+function enregAdmin(){
+    $_SESSION['admin'] = 1;
+}
+
+/**
+ * retourne un booléen, vrai si l'administrateur est connecté
+ * @return bool
+ */
+function estConnecte(){
+    return isset($_SESSION['admin']);
+}
+
+/**
+ * supprime la variable de session admin
+ */
+function quitterAppli(){
+    unset($_SESSION['admin']);
+}
 ?>
