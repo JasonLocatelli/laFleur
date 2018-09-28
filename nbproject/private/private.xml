@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/vues/v_categories.php</file>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/util/fonctions.inc.php</file>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/vues/v_produits.php</file>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/controleurs/c_gestionPanier.php</file>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/vues/v_panier.php</file>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/util/class.pdoLafleur.inc.php</file>
-            <file>file:/C:/wamp64/www/2018/lafleurMVC_corrige/vues/v_entete.php</file>
+            <file>file:/C:/Users/Cath/Documents/AuBoulot/sitesSIO2/lafleurMVC_corrige/vues/v_produitsAdmin.php</file>
+            <file>file:/C:/Users/Cath/Documents/AuBoulot/sitesSIO2/lafleurMVC_corrige/vues/v_ajoutProduitAdmin.php</file>
+            <file>file:/C:/Users/Cath/Documents/AuBoulot/sitesSIO2/lafleurMVC_corrige/util/class.pdoLafleur.inc.php</file>
+            <file>file:/C:/Users/Cath/Documents/AuBoulot/sitesSIO2/lafleurMVC_corrige/util/fonctions.inc.php</file>
+            <file>file:/C:/Users/Cath/Documents/AuBoulot/sitesSIO2/lafleurMVC_corrige/controleurs/c_gestionProduits.php</file>
         </group>
     </open-files>
 </project-private>

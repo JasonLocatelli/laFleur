@@ -148,6 +148,78 @@ class PdoLafleur
             $res = PdoLafleur::$monPdo->query($req);
             $laLigne = $res->fetch();
             return $laLigne['nb'];            
-        }        
+        }
+        /**
+         * Retourne sous forme de tableau les informations d'un produit
+         * dont l'Id est pasé en paramètre
+         * @param type $leProduit
+         */
+        public function getUnProduit($unIdProduit){
+            $req = "select * from produit where id = '$unIdProduit'";
+            $res = PdoLafleur::$monPdo->query($req);
+            $unProduit = $res->fetch();
+            return $unProduit;
+        }
+        
+        /**
+         * modifier le produit dans la base de données dont l'ID est donné en paramètre
+         * @param type $id
+         * @param type $description
+         * @param type $prix
+         */
+        public function modifierProduit($id, $description, $prix){
+            $req = "UPDATE produit set description = '$description', prix = $prix WHERE id = '$id' ";
+            $nbLignes = PdoLafleur::$monPdo->exec($req);
+            return ($nbLignes);            
+        }
+        /**
+         * Supprimer un produit dans la base de données
+         * @param type $id
+         * @return le nombre de lignes supprimées
+         */
+        public function supprimerProduit($id) {
+            $req = "DELETE FROM produit WHERE id = '$id' ";
+            $nbLignes = PdoLafleur::$monPdo->exec($req);
+            return ($nbLignes);  
+        }
+        
+        /**
+         * Obtenir les infos de la catégorie
+         * @return un tableau contenant les infos de la catégorie id et libelle
+         *
+         */
+        public function getLaCategorie($id)
+	{
+		$req = "select * from categorie WHERE id = '$id' ";
+		$res = PdoLafleur::$monPdo->query($req);
+		$uneCateg = $res->fetch();
+		return $uneCateg;
+	}
+        /**
+         * 
+         * @param type $idProduit
+         * @param type $description
+         * @param type $prix
+         * @param type $idCateg
+         * @return le nombre de lignes concernées par l'ajout
+         */
+         public function ajouterProduit($idProduit,$description, $prix, $idCateg ){
+            $req = "INSERT INTO produit (id, description, prix, idCategorie) VALUES ('$idProduit', '$description', $prix, '$idCateg') ";
+            var_dump($req);
+            $nbLignes = PdoLafleur::$monPdo->exec($req);
+            return ($nbLignes);            
+        }
+        
+         /**
+         * Retourne l'id du dernier produit de la catégorie $idCateg saisi en base de données
+         * 
+         * @param type $leProduit
+         */
+        public function getIdMaxProduit($idCateg){
+            $req = "select MAX(id) as maxId from produit where idCategorie = '$idCateg'";
+            $res = PdoLafleur::$monPdo->query($req);
+            $laLigne = $res->fetch();
+            return $laLigne['maxId'];
+        }
 }
 ?>

@@ -1,5 +1,5 @@
 ﻿<div id="creationCommande">
-<form method="POST" action="index.php?uc=administrer&action=deconnexion">
+<form method="POST" action="index.php?uc=administrer&action=validDeconnexion">
    <fieldset>
      <legend>Déconnexion</legend>
 		<p>

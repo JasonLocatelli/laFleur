@@ -211,4 +211,20 @@ function estConnecte(){
 function quitterAppli(){
     unset($_SESSION['admin']);
 }
+/**
+ * 
+ * retourne un nouvel Id pour le produit à créer
+ * @param type $maxId : l'Id max du produit de la catégorie
+ * @return un nouvel ID
+ */
+function creeNouvelId($maxId){
+    $lettre = $maxId[0];
+    $num = substr ( $maxId ,1);
+    $num++;
+    if ($num<10) {
+        $num = '0'.$num;            
+    }
+    $nouvelId = $lettre.$num;
+    return $nouvelId;
+}
 ?>
