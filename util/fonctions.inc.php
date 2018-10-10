@@ -227,4 +227,122 @@ function creeNouvelId($maxId){
     $nouvelId = $lettre.$num;
     return $nouvelId;
 }
+/**
+ * 
+ */
+function chargeImage($idProduit){
+     $nomDestination = "";
+     $hasError = false;
+    /////----------------------------------------------------
+    //----------------Traitement de l'ajout de l'image
+    //-------------------------------------------------------          
+    // Je peux faire plusieurs vérifications
+    // 
+    // $_FILES['icone']['name'] //Le nom original du fichier, comme sur le disque du visiteur (exemple : mon_icone.png).
+    // $_FILES['icone']['type'] //Le type du fichier. Par exemple, cela peut être « image/png ».
+    // $_FILES['icone']['size'] //La taille du fichier en octets.
+    // $_FILES['icone']['tmp_name'] //L'adresse vers le fichier uploadé dans le répertoire temporaire.
+    // $_FILES['icone']['error'] //Le code d'erreur, qui permet de savoir si le fichier a bien été uploadé.
+
+    //-----------------------------------------Tests des possibilités d'erreur ------------------------------------------------
+    // Erreur de transfert     
+    var_dump($_FILES);
+    if ($_FILES['imageProduit']['error'] > 0) {
+        $hasError = true;
+        echo "Erreur lors du transfert de l'image";
+        //$msgErreurs[] = "Erreur lors du transfert de l'image";
+    } else {
+        /*  Je peux si je veux, détailler les erreurs
+         *  UPLOAD_ERR_NO_FILE : fichier manquant.
+            UPLOAD_ERR_INI_SIZE : fichier dépassant la taille maximale autorisée par PHP.
+            UPLOAD_ERR_FORM_SIZE : fichier dépassant la taille maximale autorisée par le formulaire.
+            UPLOAD_ERR_PARTIAL : fichier transféré partiellement.
+         */
+        //vérifier la taiille maximale 
+        $maxSize = $_REQUEST['MAX_FILE_SIZE']; 
+        if ($_FILES['imageProduit']['size'] > $maxSize) {
+            $hasError = true;
+            echo "Le fichier est trop gros";
+            $msgErreurs[] = "Le fichier est trop gros";
+        } 
+        else {             
+            // vérifier les types acceptés
+            //$extensions_valides = array( 'jpg' , 'jpeg' , 'gif' , 'png' );
+            $extensions_valides = array( 'gif' );
+            //1. strrchr renvoie l'extension avec le point (« . »).
+            //2. substr(chaine,1) ignore le premier caractère de chaine.
+            //3. strtolower met l'extension en minuscules.
+            $extension_upload = strtolower( substr(strrchr($_FILES['imageProduit']['name'], '.') ,1) );
+            if (!in_array($extension_upload,$extensions_valides) ) {
+                $hasError = true;
+                echo "Type de fichier incorrect";
+                $msgErreurs[] = "Type de fichier incorrect";
+            } 
+            else {          
+                // contrôler les dimensions d'une image
+                $maxwidth = 200;
+                $maxheight = 200;
+                $image_sizes = getimagesize($_FILES['imageProduit']['tmp_name']); // fonction php
+                if ($image_sizes[0] > $maxwidth OR $image_sizes[1] > $maxheight) {
+                    $hasError = true;
+                    echo "Image trop grande";
+                    $msgErreurs[] = "Image trop grande";
+                }
+            }
+        }
+    }  
+    if (!$hasError) {
+        // déplacer le fichier
+        //1. Idéalement, il faut renommer le fichier de façon automatique afin de ne pas avoir de doublon dans les noms de fichiers
+        //On peut utiliser une incrémentation automatique dans le dossier
+        // Ici, pour simplifier, je garde le nom et l'extension
+        
+        // copier l'image dans le dossier correspondant à la catégorie
+        $codeCat = $idProduit[0];
+        switch ($codeCat) {
+            case 'c' : {
+                $categorie = "compo";             
+            break;
+            }
+            case 'f' : {
+                $categorie = "fleurs";               
+            break;
+            }
+            case 'p' : {
+                $categorie = "plantes";               
+            break;
+            }            
+        }
+        // adresse du fichier dans le dossier temporaire de téléchargement
+        $nomOrigine = $_FILES['imageProduit']['tmp_name'];
+        // Placement du fichier dans le dossier images du site, correspondant à la catégorie
+        $nomDestination = "images/".$categorie."/".$_FILES['imageProduit']['name'];  
+        var_dump($nomOrigine);
+        var_dump($nomDestination);
+        // déplacement du fichier
+        $resultat = move_uploaded_file($nomOrigine,$nomDestination);
+        if (!$resultat) {
+            $msgErreurs[] = "Echec de transfert";
+            echo "Echec de transfert";
+            $hasError = true;
+        }          
+    }
+    return $nomDestination;   
+}
+
+    function interrogeCapcha($response,$remoteip) {
+    // Ma clé privée 
+    $secret = "6Lc0snIUAAAAAAn9y54-WWlMPOb5md-8dPFZQsKj";
+      //Utilisation de l'API
+    $api_url = "https://www.google.com/recaptcha/api/siteverify?secret=" 
+        . $secret
+        . "&response=" . $response
+        . "&remoteip=" . $remoteip ;
+
+    // réponse en json de l'API GOOGLE
+    $decode = json_decode(file_get_contents($api_url), true);	
+    //test
+    return $decode['success'];
+}
+
 ?>

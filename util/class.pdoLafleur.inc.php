@@ -144,11 +144,18 @@ class PdoLafleur
      * @return le nombre d'utilisateurs ayant ce nom et ce mdp
      */
         public function validerAdmin($user,$mdp){
-            $req = "select count(*) as nb from administrateur where nom = '$user' and mdp ='$mdp'";
-            $res = PdoLafleur::$monPdo->query($req);
-            $laLigne = $res->fetch();
+           
+            //$req = "select count(*) as nb from administrateur where nom = '$user' and mdp ='$mdp'";    
+            //$res = PdoLafleur::$monPdo->query($req);
+           
+            // Requête SQL sécurisée           
+            $req = PdoLafleur::$monPdo->prepare("SELECT count(*) as nb from administrateur where nom = ? and mdp = ?");
+            $req->execute(array($user, $mdp));
+            $laLigne = $req->fetch();
             return $laLigne['nb'];            
         }
+        
+        
         /**
          * Retourne sous forme de tableau les informations d'un produit
          * dont l'Id est pasé en paramètre
@@ -178,8 +185,15 @@ class PdoLafleur
          * @return le nombre de lignes supprimées
          */
         public function supprimerProduit($id) {
-            $req = "DELETE FROM produit WHERE id = '$id' ";
-            $nbLignes = PdoLafleur::$monPdo->exec($req);
+            $req = "SELECT count(*) as nb FROM contenir WHERE idProduit = '$id' ";
+            $res = PdoLafleur::$monPdo->query($req);
+            $laLigne = $res->fetch();
+            $nb = $laLigne['nb'] ;  
+            $nbLignes = -1;
+            if($nb == 0) {
+                $req = "DELETE FROM produit WHERE id = '$id' ";
+                $nbLignes = PdoLafleur::$monPdo->exec($req);
+            }
             return ($nbLignes);  
         }
         
@@ -203,8 +217,8 @@ class PdoLafleur
          * @param type $idCateg
          * @return le nombre de lignes concernées par l'ajout
          */
-         public function ajouterProduit($idProduit,$description, $prix, $idCateg ){
-            $req = "INSERT INTO produit (id, description, prix, idCategorie) VALUES ('$idProduit', '$description', $prix, '$idCateg') ";
+         public function ajouterProduit($idProduit,$description, $prix, $image, $idCateg ){
+            $req = "INSERT INTO produit (id, description, prix, image, idCategorie) VALUES ('$idProduit', '$description', $prix,'$image', '$idCateg') ";
             var_dump($req);
             $nbLignes = PdoLafleur::$monPdo->exec($req);
             return ($nbLignes);            

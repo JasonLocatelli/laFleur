@@ -1,5 +1,6 @@
 ﻿<div id="creationCommande">
-<form method="POST" action="index.php?uc=administrer&action=validAjouterArticle">
+    <!-- Ajout d'un attribut pour le téléchargement de fichiers : envoi et encodage de binaire et de texte  -->
+<form method="POST" action="index.php?uc=administrer&action=validAjouterArticle" enctype="multipart/form-data">
    <fieldset>
 
        <legend>Ajout d'un produit de la catégorie <?php echo $laCateg['libelle'] ?></legend>
@@ -20,6 +21,11 @@
 			<label for="txtPrix">Prix*</label>
 			 <input id="txtPrix" type="text" name="txtPrix" size="30" maxlength="45" placeholder ="Prix du produit" >
 		</p>
+                <p>
+                    <label for="imageProduit">Fichier .gif, 30 Ko max</label><br />
+                    <input type="hidden" name="MAX_FILE_SIZE" value="30720" /> <!-- 30 * 1024 octets -->
+                    <input type="file" name="imageProduit" id="imageProduit" /><br />
+                </p>
                 <p>* : <em>champs obligatoires</em> </p>  
 	<p>
             <input type="submit" value="Valider" name="valider">

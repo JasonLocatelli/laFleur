@@ -1,17 +1,21 @@
 <?php
-//-------------------------------------------------------------------------------
-// à améliorer : 
-// les contrôles
-// sur les saisies clavier
-// --> exemple : ajout d'une chaine de caractères avec ' ex : bouquet d'hortensias
-//------------------------------------------------------------------------------------
+
 if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
+    // test de vérification que l'administrateur est bien connecté pour toutes les autres actions
+    if ($action != 'validConnexion' && !estConnecte()) {
+        $msgErreurs[] = "Action interdite, réservée à l'administrateur";
+        include ("vues/v_erreurs.php");
+        // Retour à l'affichage des catégories pour tous           
+        $lesCategories = $pdo->getLesCategories();
+	include("vues/v_categories.php");
+        exit();
+    }      
 }
 else {
     $action = 'connexion';    
-}
-
+} 
+ 
 switch ($action) {   
     case 'connexion': {
         if (!estConnecte()) {
@@ -24,15 +28,34 @@ switch ($action) {
     break;
     }
     case 'validConnexion': {
-        $user = $_REQUEST['user'];
-        $mdp = $_REQUEST['mdp'];
-        $n = $pdo->validerAdmin($user,$mdp);
-        if ($n == 1) {
-            enregAdmin();
-            $lesCategories = $pdo->getLesCategories();
-            include ('vues/v_categoriesAdmin.php');            
+        $ok = false;
+        if (isset($_REQUEST['user']) && isset($_REQUEST['mdp']) ) {
+            $user = htmlspecialchars($_REQUEST['user']);
+            $mdp = htmlspecialchars($_REQUEST['mdp']);
+            $ok = true;
+        }  
+        
+        //---------------------------------------------------
+        //Vérification capcha 
+        //---------------------------------------------------
+        // Paramètre renvoyé par le recaptcha
+	$response = $_POST['g-recaptcha-response'];
+	// On récupère l'IP de l'utilisateur
+	$remoteip = $_SERVER['REMOTE_ADDR'];
+        $ok  = $ok & interrogeCapcha($response,$remoteip);
+        
+        if ($ok ) {
+            $n = $pdo->validerAdmin($user,$mdp);
+            if ($n == 1) {
+                enregAdmin();
+                $lesCategories = $pdo->getLesCategories();
+                include ('vues/v_categoriesAdmin.php');            
+            }
+            else {	
+                $ok = false;
+            }
         }
-        else {
+        if (!$ok ) {
             $message = "Erreur d'identification ou de mot de passe !";
             include('vues/v_message.php');
             include('vues/v_connexion.php');
@@ -117,20 +140,23 @@ switch ($action) {
         else {
             $idProduit = $_REQUEST['txtId'];
             $nbLignes = $pdo->supprimerProduit($idProduit);  
-            if ($nbLignes == 0) {
-                // Erreur de requête
-                // ou Injection SQL
-                // ou produit ne pouvant être supprimé de la base de données car inclus dans une commande
-                // => table contenir - pb de clés étrangères ==> le message devrait être :
-                // "ce produit ne peut pas être supprimé ; il est inclus dans une commande"
-                $msgErreurs[] = "Suppression impossible";
-                include ("vues/v_erreurs.php");                                 
-            }   
-           else
-            {
-                $message = "suppression effectuée !!";
-                include ("vues/v_message.php");         
-            }        
+            switch ($nbLignes) {
+                case -1: {
+                    $msgErreurs[] = "Suppression impossible, produit utilisé dans une autre table";
+                    include ("vues/v_erreurs.php");  
+                break;
+                }
+                case 0 : {
+                    $msgErreurs[] = "Suppression impossible";
+                    include ("vues/v_erreurs.php");    
+                break;
+                }
+                case 1 : {
+                    $message = "suppression effectuée !!";
+                include ("vues/v_message.php");       
+                break;
+                }
+            }                    
         }
         $lesCategories = $pdo->getLesCategories();
         include ('vues/v_categoriesAdmin.php');    
@@ -167,11 +193,10 @@ switch ($action) {
         else {
             $idProduit = $_REQUEST['txtId'];            
             $description = $_REQUEST['txtDescription'];
-            $prix = $_REQUEST['txtPrix'];  
-            $nbLignes = $pdo->ajouterProduit($idProduit,$description, $prix, $idCateg );  
-            if ($nbLignes == 0) {
-                // Erreur de requête
-                // ou Injection SQL             
+            $prix = $_REQUEST['txtPrix']; 
+            $image = chargeImage($idProduit);  
+            $nbLignes = $pdo->ajouterProduit($idProduit,$description, $prix, $image, $idCateg );  
+            if ($nbLignes == 0) {                         
                 $msgErreurs[] = "Ajout impossible";
                 include ("vues/v_erreurs.php");              
             }

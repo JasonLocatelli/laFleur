@@ -11,5 +11,5 @@ foreach( $lesCategories as $uneCategorie)
 <?php
 }
 ?>
-         <li style="background: red" > <a href=index.php?uc=administrer&action=deconnexion>Quitter</a></li>
+    <li style="background: red" > <a href=index.php?uc=administrer&action=deconnexion>Quitter</a></li>
 </ul>
